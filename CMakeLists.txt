@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find required packages
 find_package(ZED 3 REQUIRED)
-find_package(CUDA REQUIRED)
+find_package(CUDA ${ZED_CUDA_VERSION} REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 

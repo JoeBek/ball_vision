@@ -1,0 +1,3 @@
+/home/vtcro/dev/golf_sim/ball_vision/build/CMakeFiles/zed_object_detection.dir
+/home/vtcro/dev/golf_sim/ball_vision/build/CMakeFiles/edit_cache.dir
+/home/vtcro/dev/golf_sim/ball_vision/build/CMakeFiles/rebuild_cache.dir
