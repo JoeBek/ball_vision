@@ -1,0 +1,6 @@
+names:
+- golfball
+nc: 1
+path: ..
+train: data/training_1/images
+val: data/training_1/images
