@@ -3,17 +3,18 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import matplotlib.pyplot as plt
+plt.switch_backend("TkAgg")
 import matplotlib.patches as patches
 import os
 from ultralytics.nn.tasks import DetectionModel  # Import the custom class
+from ultralytics import YOLO
 
 
 def load_model(model_path, device):
     """Load the PyTorch model from the .pth file."""
 
-    model = torch.load(model_path, map_location=device, weights_only=False)
+    model = YOLO(model_path)  # Load the YOLO model
     model.to(device)
-    model.eval()  # Set the model to evaluation mode
     return model
 
 def preprocess_image(image_path):
@@ -60,19 +61,18 @@ def main():
     model_path = os.path.join(models_dir, args.model)
     img_path = os.path.join(data_dir, args.image)
     
-    model = load_model(model_path, device)
+    model = load_model(model_path, device) 
     image_tensor = preprocess_image(img_path)
     
 
     # Run the model on the image
-    with torch.no_grad():
-        outputs = model(image_tensor)
-
+    results = model(image_tensor)
+    
     # Assuming the model outputs bounding boxes in the format [x, y, width, height]
-    bboxes = outputs['bboxes'] if 'bboxes' in outputs else []
+    bboxes = results[0].boxes.xywh.cpu().numpy()  # Get the bounding boxes from the model output
 
     # Display bounding boxes
-    display_bboxes(args.image, bboxes)
+    display_bboxes(img_path, bboxes)
 
 if __name__ == "__main__":
     main()
