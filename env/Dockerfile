@@ -23,4 +23,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 ENV DISPLAY=:${DISPLAY} 
 
 # Set the default command to run your script
-CMD ["/bin/bash"]
+CMD ["python", "scripts/run_img.py" , "--image", "ball_small_1.jpg", "--model", "best.pt"]

@@ -22,7 +22,7 @@ def preprocess_image(image_path):
     image = Image.open(image_path).convert("RGB")
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Resize((224, 224)),  # Adjust size as needed
+        transforms.Resize((416, 416)),  
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     return transform(image).unsqueeze(0)  # Add batch dimension
