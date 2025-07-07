@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/scripts/run_img.py",
             "console": "integratedTerminal",
-            "args": "--model best.pt --image ball_table_1.jpeg",
+            "args": "--model ball_weights_cheated.pt --image ball_med_1.jpg",
         }
     ]
 }

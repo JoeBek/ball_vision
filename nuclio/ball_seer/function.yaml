@@ -1,0 +1,31 @@
+metadata:
+  name: ball_seer
+  namespace: cvat
+  annotations:
+    name: "Ball Seer"
+    type: detector
+    framework: pytorch  
+    spec: |
+      [
+        { "id": 0, "name": "golf ball" },
+      ]
+spec:
+  description: "Custom detection model"
+  runtime: "python:3.10"
+  handler: main:handler
+  eventTimeout: 30s
+  image: ball_image:latest
+
+  triggers:
+    myHttpTrigger:
+      kind: http
+      maxWorkers: 2
+      attributes:
+        maxRequestBodySize: 33554432 # 32 mib i think
+
+  platform:
+    attributes:
+      restartPolicy:
+        name: always
+        maximumRetryCount: 3
+      mountMode: volume

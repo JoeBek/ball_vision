@@ -1,10 +1,8 @@
-# Use an official Python image as the base
 FROM python:3.10-slim
 
-# Set the working directory in the container
+# set workdir
 WORKDIR /ball_vision
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
@@ -14,13 +12,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ${WORKDIR}/requirements.txt
+COPY ../models/* /opt/balls/*
+COPY ../nuclio/function.yaml /opt/nuclio/function.yaml
 
-
-# Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r ${WORKDIR}/requirements.txt
 
 ENV DISPLAY=:${DISPLAY} 
 
-# Set the default command to run your script
-CMD ["python", "scripts/run_img.py" , "--image", "ball_small_1.jpg", "--model", "best.pt"]
+CMD ["python", "scripts/run_img.py" , "--image", "ball_small_1.jpg", "--model", "ball_weights_cheated.pt"]

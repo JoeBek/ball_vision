@@ -9,7 +9,6 @@ import os
 from ultralytics.nn.tasks import DetectionModel  # Import the custom class
 from ultralytics import YOLO
 
-
 def load_model(model_path, device):
     """Load the PyTorch model from the .pth file."""
 
@@ -17,15 +16,20 @@ def load_model(model_path, device):
     model.to(device)
     return model
 
+
 def preprocess_image(image_path):
     """Preprocess the image for the model."""
     image = Image.open(image_path).convert("RGB")
     transform = transforms.Compose([
+        #transforms.Resize((416, 416)),  
         transforms.ToTensor(),
-        transforms.Resize((416, 416)),  
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        #transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    return transform(image).unsqueeze(0)  # Add batch dimension
+
+    tensor = transform(image)
+    #return tensor.unsqueeze(0)  # Add batch dimension
+    return image
+
 
 def display_bboxes(image_path, bboxes):
     """Display bounding boxes on the image."""
@@ -34,9 +38,15 @@ def display_bboxes(image_path, bboxes):
     ax.imshow(image)
 
     for bbox in bboxes:
-        x, y, w, h = bbox
+        cx, cy, w, h = bbox
+
+        x = cx - w / 2
+        y = cy - w / 2
+        
         rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
+
+        print()
 
     plt.show()
 
@@ -67,9 +77,36 @@ def main():
 
     # Run the model on the image
     results = model(image_tensor)
+
+    threshold = 0.5
     
     # Assuming the model outputs bounding boxes in the format [x, y, width, height]
     bboxes = results[0].boxes.xywh.cpu().numpy()  # Get the bounding boxes from the model output
+    o = []
+    # YOLO returns a list of Results objects
+    for result in results:
+        if result.boxes is not None:
+            boxes = result.boxes.xyxy.cpu().numpy()  # [x1, y1, x2, y2] format
+            scores = result.boxes.conf.cpu().numpy()  # confidence scores
+            classes = result.boxes.cls.cpu().numpy()  # class indices
+            
+            for box, score, cls in zip(boxes, scores, classes):
+                if score < threshold:
+                    continue
+                    
+                # Convert class index to label
+                label = cls
+                
+                # Convert box coordinates to list
+                box_coords = [float(coord) for coord in box]
+                
+                o.append({
+                    "confidence": str(float(score)),
+                    "label": label,
+                    "points": box_coords,  # [x1, y1, x2, y2]
+                    "type": "rectangle"
+                })
+
 
     # Display bounding boxes
     display_bboxes(img_path, bboxes)
