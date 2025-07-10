@@ -216,33 +216,22 @@ int main(int argc, char **argv)
 
             // Retrieve the tracked objects, with 2D and 3D attributes
             zed.retrieveCustomObjects(objects, customObjectTracker_rt);
-
+            /*
+             * Custom Code added to determine ball position in 3D space
+             * These are my next goals
+             * - Determine ball bounding box size so that ball velocity can be rationalized to real units?
+             *
+             */
             if (!objects.object_list.empty())
             {
 
                 auto first_object = objects.object_list.front();
-
-                cout << "First object attributes :\n";
-                cout << " Label '" << first_object.label << "' (conf. "
-                     << first_object.confidence << "/100)\n";
-
-                if (detection_parameters.enable_tracking)
-                    cout << " Tracking ID: " << first_object.id << " tracking state: " << first_object.tracking_state << " / " << first_object.action_state << "\n";
-
-                cout << " 3D position: " << first_object.position << " Velocity: " << first_object.velocity << "\n";
-
-                cout << " 3D dimensions: " << first_object.dimensions << "\n";
-
-                if (first_object.mask.isInit())
-                    cout << " 2D mask available\n";
-
-                cout << " Bounding Box 2D \n";
-                for (auto it : first_object.bounding_box_2d)
-                    cout << "    " << it << "\n";
-
-                cout << " Bounding Box 3D \n";
-                for (auto it : first_object.bounding_box)
-                    cout << "    " << it << "\n";
+                velvec = first_object.velocity;
+                vmag = sqrt(veclvec[0] ^ 2 + velvec[1] ^ 2 + velvec[2] ^ 2);
+                if (vmag > 1500)
+                {
+                    cout << "that boy moving\n";
+                }
             }
 
             // GL Viewer
