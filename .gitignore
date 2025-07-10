@@ -3,3 +3,6 @@
 
 # Training data
 training/
+
+#build folder for cpp projects
+*/build/
