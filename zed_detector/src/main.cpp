@@ -180,7 +180,7 @@ int main(int argc, char **argv)
     sl::Pose cam_w_pose;
     cam_w_pose.pose_data.setIdentity();
     auto zed_cuda_stream = zed.getCUDAStream();
-
+   
     // Main loop
     int key = -1;
     while (viewer.isAvailable())
@@ -227,11 +227,19 @@ int main(int argc, char **argv)
 
                 auto first_object = objects.object_list.front();
                 auto velvec = first_object.velocity;
-                int vmag = sqrt(std::pow(velvec[0], 2) + std::pow(velvec[1], 2)+std::pow(velvec[2], 2));
+                float vmag = sqrt(std::pow(velvec[0], 2) + std::pow(velvec[1], 2)+std::pow(velvec[2], 2));
                 if (vmag > 1500)
                 {
                     cout << "that boy moving\n";
+		    cout << "Magnitude:" << vmag << std::endl;
+		    cout << "Direction: <" << velvec[0]/vmag <<  velvec[1]/vmag <<  velvec[2]/vmag << ">\n"; 
                 }
+		else if (vmag < 1)
+		{
+			cout << "that boy stable\n";
+      		    	cout << "Magnitude:" << vmag << std::endl;
+		    	cout << "Direction: <" << velvec[0]/vmag <<  velvec[1]/vmag <<  velvec[2]/vmag << ">\n";
+		}
             }
 
             // GL Viewer
