@@ -12,6 +12,7 @@
 #include <NvInfer.h>
 
 using namespace nvinfer1;
+using std::cout;
 #define NMS_THRESH 0.4
 #define CONF_THRESH 0.3
 
