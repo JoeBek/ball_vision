@@ -5,4 +5,7 @@
 training/
 
 #build folder for cpp projects
-*/build/
+*build/
+
+#ignore runs
+*/runs
