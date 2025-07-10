@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 
                 auto first_object = objects.object_list.front();
                 auto velvec = first_object.velocity;
-                vmag = sqrt(veclvec[0] ^ 2 + velvec[1] ^ 2 + velvec[2] ^ 2);
+                int vmag = sqrt(veclvec[0] ^ 2 + velvec[1] ^ 2 + velvec[2] ^ 2);
                 if (vmag > 1500)
                 {
                     cout << "that boy moving\n";
