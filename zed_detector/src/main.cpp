@@ -216,6 +216,34 @@ int main(int argc, char **argv)
             // Retrieve the tracked objects, with 2D and 3D attributes
             zed.retrieveCustomObjects(objects, customObjectTracker_rt);
 
+            if (!objects.object_list.empty())
+            {
+
+                auto first_object = objects.object_list.front();
+
+                cout << "First object attributes :\n";
+                cout << " Label '" << first_object.label << "' (conf. "
+                     << first_object.confidence << "/100)\n";
+
+                if (detection_parameters.enable_tracking)
+                    cout << " Tracking ID: " << first_object.id << " tracking state: " << first_object.tracking_state << " / " << first_object.action_state << "\n";
+
+                cout << " 3D position: " << first_object.position << " Velocity: " << first_object.velocity << "\n";
+
+                cout << " 3D dimensions: " << first_object.dimensions << "\n";
+
+                if (first_object.mask.isInit())
+                    cout << " 2D mask available\n";
+
+                cout << " Bounding Box 2D \n";
+                for (auto it : first_object.bounding_box_2d)
+                    cout << "    " << it << "\n";
+
+                cout << " Bounding Box 3D \n";
+                for (auto it : first_object.bounding_box)
+                    cout << "    " << it << "\n";
+            }
+
             // GL Viewer
             zed.retrieveMeasure(point_cloud, sl::MEASURE::XYZRGBA, sl::MEM::GPU, pc_resolution);
             zed.getPosition(cam_w_pose, sl::REFERENCE_FRAME::WORLD);
